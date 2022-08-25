@@ -1,0 +1,1 @@
+web: java -jar target/gestione-pianificazione-1.0.0-SNAPSHOT.jar
