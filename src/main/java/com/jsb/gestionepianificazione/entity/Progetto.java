@@ -1,8 +1,7 @@
-package com.jsb.gestionepianificazione;
+package com.jsb.gestionepianificazione.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Example JPA entity.
@@ -23,9 +22,10 @@ import javax.persistence.Id;
  * }
  */
 @Entity
-public class MyEntity {
+public class Progetto {
     private Long id;
-    private String field;
+    @Column(length = 500)
+    private String nome;
 
     @Id
     @GeneratedValue
@@ -37,11 +37,19 @@ public class MyEntity {
         this.id = id;
     }
 
-    public String getField() {
-        return field;
+    public String getNome() {
+        return nome;
     }
 
-    public void setField(String field) {
-        this.field = field;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    @Override
+    public String toString() {
+        return "Dipendente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                '}';
     }
 }
