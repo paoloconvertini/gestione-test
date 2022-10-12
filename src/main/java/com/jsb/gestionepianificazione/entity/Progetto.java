@@ -1,55 +1,37 @@
 package com.jsb.gestionepianificazione.entity;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
-/**
- * Example JPA entity.
- *
- * To use it, get access to a JPA EntityManager via injection.
- *
- * {@code
- *     @Inject
- *     EntityManager em;
- *
- *     public void doSomething() {
- *         MyEntity entity1 = new MyEntity();
- *         entity1.setField("field-1");
- *         em.persist(entity1);
- *
- *         List<MyEntity> entities = em.createQuery("from MyEntity", MyEntity.class).getResultList();
- *     }
- * }
- */
+import javax.persistence.*;
+import java.util.Objects;
+
+import static com.jsb.gestionepianificazione.constant.DatabaseConstant.PROGETTO_FIND_ALL;
+
 @Entity
+@ToString
+@Getter @Setter
+@NamedQuery(name = PROGETTO_FIND_ALL, query = "Select p from Progetto p ORDER BY p.nome")
 public class Progetto {
+
+    @Id
+    @GeneratedValue
     private Long id;
     @Column(length = 500)
     private String nome;
 
-    @Id
-    @GeneratedValue
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Progetto progetto = (Progetto) o;
+        return id != null && Objects.equals(id, progetto.id);
     }
 
     @Override
-    public String toString() {
-        return "Dipendente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                '}';
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

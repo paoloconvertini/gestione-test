@@ -1,29 +1,21 @@
 package com.jsb.gestionepianificazione.entity;
 
-import javax.persistence.*;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
-/**
- * Example JPA entity.
- *
- * To use it, get access to a JPA EntityManager via injection.
- *
- * {@code
- *     @Inject
- *     EntityManager em;
- *
- *     public void doSomething() {
- *         MyEntity entity1 = new MyEntity();
- *         entity1.setField("field-1");
- *         em.persist(entity1);
- *
- *         List<MyEntity> entities = em.createQuery("from MyEntity", MyEntity.class).getResultList();
- *     }
- * }
- */
+import javax.persistence.*;
+import java.util.Objects;
+
+import static com.jsb.gestionepianificazione.constant.DatabaseConstant.*;
+
 @Entity
+@ToString
+@NamedQuery(name = PIANIFICATO_FIND_BY_ID_PROGETTO, query = "Select p from Pianificato p where p.progetto.id =:idProgetto")
+@NamedQuery(name = PIANIFICATO_FIND_BY_FK, query = "Select p from Pianificato p where p.progetto.id =:idProgetto and p.dipendente.id =:idDipendente and p.flagProgrammato =:flagProgrammato")
 @Table(uniqueConstraints= @UniqueConstraint(
-        name="dipAndprog",
-        columnNames={"dipendente_id", "progetto_id"} ))
+        name=DIP_AND_PROG,
+        columnNames={DIPENDENTE_ID, PROGETTO_ID, FLAG_PROGRAMMATO} )
+)
 public class Pianificato {
     private Long id;
     private Double gennaio;
@@ -38,11 +30,14 @@ public class Pianificato {
     private Double ottobre;
     private Double novembre;
     private Double dicembre;
-    private Boolean flagPianificato;
+    private Boolean flagProgrammato;
 
     private Dipendente dipendente;
 
     private Progetto progetto;
+
+    @Column(length = 2000)
+    private String note;
 
     @OneToOne(targetEntity = Progetto.class)
     public Progetto getProgetto() {
@@ -168,13 +163,32 @@ public class Pianificato {
         this.dicembre = dicembre;
     }
 
-    public Boolean getFlagPianificato() {
-        return flagPianificato;
+    public Boolean getFlagProgrammato() {
+        return flagProgrammato;
     }
 
-    public void setFlagPianificato(Boolean flagPianificato) {
-        this.flagPianificato = flagPianificato;
+    public void setFlagProgrammato(Boolean flagProgrammato) {
+        this.flagProgrammato = flagProgrammato;
     }
 
+    public String getNote() {
+        return note;
+    }
 
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Pianificato that = (Pianificato) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

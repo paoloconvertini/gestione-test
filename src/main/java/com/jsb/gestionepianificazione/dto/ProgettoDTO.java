@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class DipendenteDTO implements Serializable {
+public class ProgettoDTO implements Serializable {
     private String nome;
-    private String cognome;
 }

@@ -6,12 +6,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-public class DipendenteDTO implements Serializable {
-    private String nome;
-    private String cognome;
+public class PianificatoDTO implements Serializable {
+    private List<PianificatoDipendenteDTO> pianificatoDipendenteDTOList;
+    private Long idProgetto;
+    private String note;
 }

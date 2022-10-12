@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
+import static com.jsb.gestionepianificazione.constant.DatabaseConstant.DIPENDENTE_FIND_ALL;
+
 @ApplicationScoped
 public class DipendenteServiceImpl implements IDipendenteService {
 
@@ -48,12 +50,12 @@ public class DipendenteServiceImpl implements IDipendenteService {
     }
 
     public List<Dipendente> getDipendenti() {
-        return entityManager.createNamedQuery("Dipendente.findAll", Dipendente.class).getResultList();
+        return entityManager.createNamedQuery(DIPENDENTE_FIND_ALL, Dipendente.class).getResultList();
     }
 
     @Override
     @Transactional
-    public void updateDipendente(Dipendente dipendente) {
+    public void updateDipendente(Long id, Dipendente dipendente) {
         if (dipendente.getNome() == null) {
             throw new WebApplicationException("Il nome del dipendente non è stato impostato.", 422);
         }
@@ -61,9 +63,9 @@ public class DipendenteServiceImpl implements IDipendenteService {
             throw new WebApplicationException("Il cognome del dipendente non è stato impostato.", 422);
         }
 
-        Dipendente entity = entityManager.find(Dipendente.class, dipendente.getId());
+        Dipendente entity = entityManager.find(Dipendente.class, id);
         if (entity == null) {
-            throw new WebApplicationException("Il dipendente con id " + dipendente.getId() + " non esiste.", 404);
+            throw new WebApplicationException("Il dipendente con id " + id + " non esiste.", 404);
         }
         entity.setNome(dipendente.getNome());
         entity.setCognome(dipendente.getCognome());

@@ -11,7 +11,7 @@ public interface IDipendenteService {
 
     void saveDipendente(DipendenteDTO dipendente);
 
-    void updateDipendente(Dipendente dipendente);
+    void updateDipendente(Long id, Dipendente dipendente);
 
     Dipendente getDipendente(Long id);
 

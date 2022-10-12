@@ -1,30 +1,23 @@
 package com.jsb.gestionepianificazione.entity;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
-/**
- * Example JPA entity.
- *
- * To use it, get access to a JPA EntityManager via injection.
- *
- * {@code
- *     @Inject
- *     EntityManager em;
- *
- *     public void doSomething() {
- *         MyEntity entity1 = new MyEntity();
- *         entity1.setField("field-1");
- *         em.persist(entity1);
- *
- *         List<MyEntity> entities = em.createQuery("from MyEntity", MyEntity.class).getResultList();
- *     }
- * }
- */
+import javax.persistence.*;
+import java.util.Objects;
+
+import static com.jsb.gestionepianificazione.constant.DatabaseConstant.DIPENDENTE_FIND_ALL;
+
 @Entity
-@NamedQuery(name = "Dipendente.findAll", query = "Select d from Dipendente d ORDER BY d.cognome, d.nome")
+@ToString
+@Getter @Setter
+@NamedQuery(name = DIPENDENTE_FIND_ALL, query = "Select d from Dipendente d ORDER BY d.cognome, d.nome")
 public class Dipendente {
 
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(length = 500)
@@ -33,38 +26,16 @@ public class Dipendente {
     @Column(length = 500)
     private String cognome;
 
-    @Id
-    @GeneratedValue
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCognome() {
-        return cognome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Dipendente that = (Dipendente) o;
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
-    public String toString() {
-        return "Dipendente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cognome='" + cognome + '\'' +
-                '}';
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
