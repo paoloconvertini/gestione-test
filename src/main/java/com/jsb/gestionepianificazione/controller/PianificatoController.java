@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+import static com.jsb.gestionepianificazione.constant.DatabaseConstant.*;
+import static com.jsb.gestionepianificazione.constant.DatabaseConstant.ID_DIPENDENTE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("api/v1/pianificato/")
@@ -35,26 +37,32 @@ public class PianificatoController {
         return Response.ok(new ResponseDTO("Pianificazione creato con successo", false)).build();
     }
 
+    @Operation(summary = "Returns all the progetti with pianificazioni")
     @GET
-    @Path("{id}")
-    public Response getPianificato(Long id){
-        return Response.ok(pianificatoService.getPianificato(id)).build();
+    @Path("/checkProgettiPianificati/{id}")
+    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = Dipendente.class, type = SchemaType.ARRAY)))
+    @APIResponse(responseCode = "204", description = "No Progetti")
+    public Response checkProgettiPianificati(Long id) {
+        return Response.ok(pianificatoService.existsPianificatoById(id, PIANIFICATO_FIND_BY_ID_PROGETTO, ID_PROGETTO)).build();
+    }
+
+    @Operation(summary = "Returns all the dipendenti with pianificazioni")
+    @GET
+    @Path("/checkDipendentiPianificati/{id}")
+    @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = Dipendente.class, type = SchemaType.ARRAY)))
+    @APIResponse(responseCode = "204", description = "No Dipendenti")
+    public Response checkDipendentiPianificati(Long id) {
+        return Response.ok(pianificatoService.existsPianificatoById(id, PIANIFICATO_FIND_BY_ID_DIPENDENTE, ID_DIPENDENTE)).build();
     }
 
     @Operation(summary = "Returns all the pianificato from the database")
     @GET
     @Path("all/{id}")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = Pianificato.class, type = SchemaType.ARRAY)))
-    @APIResponse(responseCode = "204", description = "No Dipendenti")
+    @APIResponse(responseCode = "204", description = "No Progetti")
     public Response getPianificatoByIdProgetto(Long id) {
         return Response.ok(pianificatoService.getPianificatoByIdProgetto(id)).build();
     }
 
-    @DELETE
-    @Path("{id}")
-    public Response delete(Long id) {
-        pianificatoService.deletePianificato(id);
-        return Response.status(204).build();
-    }
 
 }

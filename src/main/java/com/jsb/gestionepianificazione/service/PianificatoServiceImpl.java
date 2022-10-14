@@ -54,26 +54,21 @@ public class PianificatoServiceImpl implements IPianificatoService {
             }
         });
     }
-
     @Override
-    public Pianificato getPianificato(Long id) {
-        Pianificato entity = entityManager.find(Pianificato.class, id);
-        if (entity == null) {
-            throw new WebApplicationException("La pianificazione con id " + id + " non esiste.", 404);
-        }
-        return entity;
+    @Transactional
+    public List<Pianificato> getPianificatoByIdDipendente(Long idDipendente) {
+        return entityManager.createNamedQuery(PIANIFICATO_FIND_BY_ID_DIPENDENTE, Pianificato.class).setParameter(ID_DIPENDENTE, idDipendente).getResultList();
     }
 
     @Override
     @Transactional
-    public void deletePianificato(Long id) {
-        Pianificato pianificato = entityManager.getReference(Pianificato.class, id);
-        if (pianificato == null) {
-            throw new WebApplicationException("La pianificazione con id " + id + " non esiste.", 404);
-        }
-        entityManager.remove(pianificato);
+    public boolean existsPianificatoById(Long id, String query, String parameter) {
+        List<Pianificato> resultList = entityManager.createNamedQuery(query, Pianificato.class).setParameter(parameter, id).getResultList();
+        return resultList != null && !resultList.isEmpty();
     }
 
+    @Override
+    @Transactional
     public PianificatoDTO getPianificatoByIdProgetto(Long idProgetto) {
         PianificatoDTO result = new PianificatoDTO();
         List<Pianificato> pianificatoList = entityManager.createNamedQuery(PIANIFICATO_FIND_BY_ID_PROGETTO, Pianificato.class).setParameter(ID_PROGETTO, idProgetto).getResultList();

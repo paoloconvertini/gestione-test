@@ -1,9 +1,13 @@
 package com.jsb.gestionepianificazione.service;
 
 import com.jsb.gestionepianificazione.dto.DipendenteDTO;
+import com.jsb.gestionepianificazione.dto.PianificatoDTO;
 import com.jsb.gestionepianificazione.entity.Dipendente;
+import com.jsb.gestionepianificazione.entity.Pianificato;
 import com.jsb.gestionepianificazione.mapper.DipendenteMapper;
+import com.jsb.gestionepianificazione.mapper.PianificatoMapper;
 import com.jsb.gestionepianificazione.service.api.IDipendenteService;
+import com.jsb.gestionepianificazione.service.api.IPianificatoService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,6 +26,9 @@ public class DipendenteServiceImpl implements IDipendenteService {
 
     @Inject
     DipendenteMapper dipendenteMapper;
+
+    @Inject
+    IPianificatoService pianificatoService;
 
     @Transactional
     @Override
@@ -45,6 +52,10 @@ public class DipendenteServiceImpl implements IDipendenteService {
         Dipendente dipendente = entityManager.getReference(Dipendente.class, id);
         if (dipendente == null) {
             throw new WebApplicationException("Il dipendente con id " + id + " non esiste.", 404);
+        }
+        List<Pianificato> list = pianificatoService.getPianificatoByIdDipendente(id);
+        if(list != null && !list.isEmpty()) {
+            list.forEach(p -> entityManager.remove(p));
         }
         entityManager.remove(dipendente);
     }

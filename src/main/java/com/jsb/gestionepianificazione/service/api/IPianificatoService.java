@@ -11,9 +11,7 @@ public interface IPianificatoService {
 
     void savePianificato(PianificatoDTO pianificatoDTO);
 
-    Pianificato getPianificato(Long id);
+    List<Pianificato> getPianificatoByIdDipendente(Long id);
 
-    void deletePianificato(Long id);
-
-
+    boolean existsPianificatoById(Long id, String query, String parameter);
 }

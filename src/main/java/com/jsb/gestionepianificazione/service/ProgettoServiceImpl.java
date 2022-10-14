@@ -1,8 +1,12 @@
 package com.jsb.gestionepianificazione.service;
 
+import com.jsb.gestionepianificazione.dto.PianificatoDTO;
 import com.jsb.gestionepianificazione.dto.ProgettoDTO;
+import com.jsb.gestionepianificazione.entity.Pianificato;
 import com.jsb.gestionepianificazione.entity.Progetto;
+import com.jsb.gestionepianificazione.mapper.PianificatoMapper;
 import com.jsb.gestionepianificazione.mapper.ProgettoMapper;
+import com.jsb.gestionepianificazione.service.api.IPianificatoService;
 import com.jsb.gestionepianificazione.service.api.IProgettoService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -22,6 +26,12 @@ public class ProgettoServiceImpl implements IProgettoService {
 
     @Inject
     ProgettoMapper progettoMapper;
+
+    @Inject
+    IPianificatoService pianificatoService;
+
+    @Inject
+    PianificatoMapper pianificatoMapper;
 
     @Transactional
     @Override
@@ -45,6 +55,11 @@ public class ProgettoServiceImpl implements IProgettoService {
         Progetto progetto = entityManager.getReference(Progetto.class, id);
         if (progetto == null) {
             throw new WebApplicationException("Il progetto con id " + id + " non esiste.", 404);
+        }
+        PianificatoDTO dto = pianificatoService.getPianificatoByIdProgetto(id);
+        if(dto != null) {
+            List<Pianificato> pianificatoList = pianificatoMapper.fromDTOtoEntity(dto);
+            pianificatoList.forEach(p -> entityManager.remove(p));
         }
         entityManager.remove(progetto);
     }

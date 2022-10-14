@@ -11,6 +11,7 @@ import static com.jsb.gestionepianificazione.constant.DatabaseConstant.*;
 @Entity
 @ToString
 @NamedQuery(name = PIANIFICATO_FIND_BY_ID_PROGETTO, query = "Select p from Pianificato p where p.progetto.id =:idProgetto")
+@NamedQuery(name = PIANIFICATO_FIND_BY_ID_DIPENDENTE, query = "Select p from Pianificato p where p.dipendente.id =:idDipendente")
 @NamedQuery(name = PIANIFICATO_FIND_BY_FK, query = "Select p from Pianificato p where p.progetto.id =:idProgetto and p.dipendente.id =:idDipendente and p.flagProgrammato =:flagProgrammato")
 @Table(uniqueConstraints= @UniqueConstraint(
         name=DIP_AND_PROG,
