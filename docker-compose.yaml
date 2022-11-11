@@ -1,0 +1,22 @@
+version: "3"
+services:
+    database-auth:
+        image: "mysql:8.0"
+        container_name: "gp-auth-db"
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_USERNAME: root
+            MYSQL_DATABASE: auth
+    database-app:
+        image: "mysql:8.0"
+        container_name: "gestione-pianificazione-db"
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_USERNAME: root
+            MYSQL_DATABASE: gestionepianificazione
+
+
