@@ -1,38 +1,26 @@
 package it.paolo.convertini.entity;
 
-import lombok.*;
-import org.hibernate.Hibernate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.Collection;
 
 @Entity
-@Table(name = "ROLE")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
-@NoArgsConstructor
-@AllArgsConstructor
-public class Role {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+@Table(name="ROLE")
+public class Role extends PanacheEntity {
 
     @Column(unique = true, nullable = false)
-    private String name;
+    public String name;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Role role = (Role) o;
-        return id != null && Objects.equals(id, role.id);
-    }
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    public Collection<User> users;
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public static Role findByName(String name) {
+        return find("name", name).firstResult();
     }
 }

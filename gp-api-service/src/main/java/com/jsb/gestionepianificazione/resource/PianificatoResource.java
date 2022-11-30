@@ -1,11 +1,9 @@
-package com.jsb.gestionepianificazione.controller;
+package com.jsb.gestionepianificazione.resource;
 
-import com.jsb.gestionepianificazione.dto.DipendenteDTO;
 import com.jsb.gestionepianificazione.dto.PianificatoDTO;
 import com.jsb.gestionepianificazione.dto.ResponseDTO;
 import com.jsb.gestionepianificazione.entity.Dipendente;
 import com.jsb.gestionepianificazione.entity.Pianificato;
-import com.jsb.gestionepianificazione.service.api.IDipendenteService;
 import com.jsb.gestionepianificazione.service.api.IPianificatoService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -25,7 +23,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("api/v1/pianificato/")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
-public class PianificatoController {
+public class PianificatoResource {
 
     @Inject
     IPianificatoService pianificatoService;

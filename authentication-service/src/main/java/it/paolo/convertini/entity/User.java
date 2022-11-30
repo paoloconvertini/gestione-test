@@ -1,34 +1,56 @@
 package it.paolo.convertini.entity;
 
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.panache.common.Parameters;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static javax.persistence.FetchType.EAGER;
+import java.util.Date;
+import java.util.Map;
 
 @Entity
 @Table(name = "USER")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class User extends PanacheEntity implements Serializable {
 
     @Column(unique = true, nullable = false)
-    private String username;
+    public String username;
 
     @Column(nullable = false)
-    private String password;
+    public String name;
 
-    @OneToMany(fetch = EAGER)
-    private Collection<Role> roles = new ArrayList<>();
+    @Column(nullable = false)
+    public String lastname;
+
+    @Column(nullable = false)
+    public Date dataNascita;
+
+    @Column(nullable = false)
+    public String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "USER_ROLE",
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}),
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    public Collection<Role> roles = new ArrayList<>();
+
+    public static User findByUsernameAndPassword(String username, String password){
+        Map<String, Object> params = Parameters.with("username", username)
+                .and("password", password)
+                .map();
+
+        return find("username =:username AND password =:password", params).firstResult();
+    }
+
 }
 

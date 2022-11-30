@@ -1,11 +1,9 @@
 package com.jsb.gestionepianificazione.service;
 
 import com.jsb.gestionepianificazione.dto.DipendenteDTO;
-import com.jsb.gestionepianificazione.dto.PianificatoDTO;
 import com.jsb.gestionepianificazione.entity.Dipendente;
 import com.jsb.gestionepianificazione.entity.Pianificato;
 import com.jsb.gestionepianificazione.mapper.DipendenteMapper;
-import com.jsb.gestionepianificazione.mapper.PianificatoMapper;
 import com.jsb.gestionepianificazione.service.api.IDipendenteService;
 import com.jsb.gestionepianificazione.service.api.IPianificatoService;
 

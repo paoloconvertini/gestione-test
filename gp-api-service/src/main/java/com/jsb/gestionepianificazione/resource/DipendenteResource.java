@@ -1,4 +1,4 @@
-package com.jsb.gestionepianificazione.controller;
+package com.jsb.gestionepianificazione.resource;
 
 import com.jsb.gestionepianificazione.dto.DipendenteDTO;
 import com.jsb.gestionepianificazione.dto.ResponseDTO;
@@ -11,6 +11,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -20,7 +22,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("api/v1/dipendenti")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
-public class DipendenteController {
+public class DipendenteResource {
 
     @Inject
     IDipendenteService dipendenteService;
@@ -33,6 +35,7 @@ public class DipendenteController {
     }
 
     @GET
+    @PermitAll
     @Path("/{idDipendente}")
     public Response getDipendente(Long idDipendente){
         return Response.ok(dipendenteService.getDipendente(idDipendente)).build();
@@ -40,6 +43,7 @@ public class DipendenteController {
 
     @Operation(summary = "Returns all the dipendenti from the database")
     @GET
+    @RolesAllowed("User")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = Dipendente.class, type = SchemaType.ARRAY)))
     @APIResponse(responseCode = "204", description = "No Dipendenti")
     public Response getAllDipendenti() {
